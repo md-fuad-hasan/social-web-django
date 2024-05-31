@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block css %}
+<style>
+    .signup{
+        width: 500px;
+        margin: auto;
+        margin-top: 50px;
+        padding: 30px 20px;
+        border: 2px solid #eee;
+    }
+    .signup-head{
+        margin-bottom: 30px;
+    }
+</style>
+
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="signup shadow-lg rounded">
+        <h3 class="signup-head">SignUp here</h3>
+        <form action="" method="POST">
+            {{form|crispy}}
+            {% csrf_token %}
+
+            <button type="submit" style="width: 100% ;margin: 20px 0;" class="btn btn-primary" >SignUp</button>
+        </form>
+        <p>Did you have any account ? <a href="{% url 'account:login'  %}">Login</a></p>
+    </div>
+</div>
+
+{% endblock %}
