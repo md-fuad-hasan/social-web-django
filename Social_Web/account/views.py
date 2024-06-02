@@ -6,6 +6,7 @@ from django.contrib.auth.hashers import check_password
 
 from .forms import NewUserForm, LoginForm
 from .models import UserProfile, SocialUser
+from post.models import Post
 
 # Create your views here.
 
@@ -55,4 +56,20 @@ def logout_view(request):
 
 @login_required
 def home(request):
-    return HttpResponse("Hello")
+    try:
+        user_profile = SocialUser.objects.get(user=request.user)
+    except:
+        user_profile = None
+
+    return render(request, 'home.html', context={'user_profile':user_profile})
+
+@login_required
+def user_profile(request):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+        user_posts = Post.objects.filter(user=request.user).order_by('-post_created')
+        
+        
+    except:
+        user_profile = None
+    return render(request, 'profile.html', context={'user_profile':user_profile, 'user_posts':user_posts})
