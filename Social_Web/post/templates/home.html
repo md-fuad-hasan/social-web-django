@@ -1,6 +1,36 @@
 {% extends 'navbar.html' %} 
 
 {% block body %}
-<h1>This is home page</h1>
+    <div class="container-md ">
+        {% if results %}
+        <div class="row">
+            <div class=" col-sm-3">
+
+            </div>
+            <div class="col-12 col-sm-9">
+                <h3 class="my-5">People you may know</h3>
+            </div>
+        </div>
+        
+        <div class="mt-1">
+            {% for result in results %}
+                <div class="row mt-sm-4 mt-3">
+                    <div class="col-1 col-sm-3"></div>
+                    <div class="col-10 col-sm-9">
+                        <img src="/media/{{ result.profile.profile_pic}}" height="60px" width="60px" class="rounded-circle" alt="">
+                        <span class="mx-sm-4 mx-3" style="width: 300px;"> {{result.username}}</span>                      
+                        <span> Follow </span>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% else %}
+
+        <p>This is home Page</p>
+
+        {% endif %}
+    </div>
+    
 
 {% endblock %}

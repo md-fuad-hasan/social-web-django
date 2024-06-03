@@ -7,6 +7,7 @@ from django.contrib.auth.hashers import check_password
 from .forms import NewUserForm, LoginForm
 from .models import UserProfile, SocialUser
 from post.models import Post
+from post.forms import PostForm
 
 # Create your views here.
 
@@ -72,4 +73,21 @@ def user_profile(request):
         
     except:
         user_profile = None
-    return render(request, 'profile.html', context={'user_profile':user_profile, 'user_posts':user_posts})
+    
+    form = PostForm()
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            form = PostForm()
+    return render(request, 'profile.html', context={'user_profile':user_profile, 'user_posts':user_posts, 'form':form})
+
+@login_required
+def search_user(request):
+    if request.method == 'GET':
+        data = request.GET.get('search')
+        results = SocialUser.objects.filter(username__icontains = data)
+
+    return render(request, 'home.html', context={'results':results})

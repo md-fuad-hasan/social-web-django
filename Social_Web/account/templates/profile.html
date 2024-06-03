@@ -1,5 +1,6 @@
 {% extends 'navbar.html' %}
-
+{% load static %}
+{% load crispy_forms_tags %} 
 {% block body %}
 
     <div class="container-md  mt-4">
@@ -26,8 +27,8 @@
                             </div>
                             <div class="d-none d-md-block  flex mt-4 ">
                                 <span class=" mr-md-4">{{user.post.count}} posts</span>
-                                <span class="mr-md-4">0 followers</span>
-                                <span >0 following</span>
+                                <span class="mr-md-4">{{user.follower.count}} followers</span>
+                                <span >{{user.following.count}} following</span>
         
                             </div>
                             <div class= "d-md-block d-none mt-4">
@@ -39,8 +40,8 @@
                     </div>
                     <div class=" d-md-none flex">
                         <span class="mr-1 ">{{user.post.count}} posts</span>
-                        <span class="mr-1 ">0 followers</span>
-                        <span >0 following</span>
+                        <span class="mr-1 ">{{user.follower.count}} followers</span>
+                        <span >{{user.following.count}} following</span>
 
                     </div>
                     <div class="d-md-none">
@@ -48,13 +49,12 @@
                         <p>{{ user.profile.bio}}</p>
                     </div>
 
-                    <div class=" d-inline-block m-5">
-                        
-                        <i class="fa-solid fa-plus bg-light border rounded-circle " style="font-size: 50px ; font-weight: 100; padding: 20px 25px;"></i>
-                        <br><span style="margin-left: 32px;">New</span>
+                    <div class=" d-inline-block cursor-pointer m-5" style="cursor: pointer;" >
+                        <a href="{% url 'post:upload' %}">
+                            <i class="fa-solid fa-plus bg-light border rounded-circle " style="font-size: 50px ; font-weight: 100; padding: 20px 25px;"></i>
+                            <br><span style="margin-left: 32px;">New</span>               
+                        </a>        
                     </div>
-
-
                     <hr>
                 </div>
 
@@ -71,13 +71,19 @@
             <div class="col-md-8">
                 {% for post in user_posts %}
 
-                <img src="/media/{{post.content}}" style="width: 32%; height: 260px;" alt="">
+                    {% if post.media_type_html == "video" %}
+                        <video style="width: 32%; height: 260px;" alt="This is video" > <source src="/media/{{ post.content }}" > </video>
+                    {% elif post.media_type_html == "image" %}
+                        <img src="/media/{{post.content}}" style="width: 32%; height: 260px;" alt="">
+                    {% endif %}
 
                 {% endfor %}
             </div>
+            
             <div class="col-md-2"></div>
         </div>
         
     </div>
+
 
 {% endblock %}

@@ -69,3 +69,12 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return str(self.user.username)
+    
+
+class Follow(models.Model):
+    follower = models.ForeignKey(SocialUser, on_delete=models.CASCADE, related_name='follower')
+    following = models.ForeignKey(SocialUser, on_delete=models.CASCADE, related_name='following')
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.follower.username) + ' follows ' + str(self.following.username)

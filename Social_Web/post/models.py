@@ -1,6 +1,6 @@
 from django.db import models
 from account.models import SocialUser, UserProfile
-
+from mimetypes import guess_type
 # Create your models here.
 
   
@@ -18,5 +18,10 @@ class Post(models.Model):
     def __str__(self):
         return self.user.username + "'s post ->" + str(self.pk)
     
-
+    def media_type_html(self):
+        type_tuple = guess_type(self.content.url, strict=True)
+        if (type_tuple[0]).__contains__("image"):
+            return "image"
+        elif (type_tuple[0]).__contains__("video"):
+            return "video"
 
