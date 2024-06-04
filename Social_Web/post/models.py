@@ -10,7 +10,7 @@ def upload_post(instance, filename):
 
 class Post(models.Model):
     user = models.ForeignKey(SocialUser, on_delete=models.CASCADE, related_name='post')
-    content = models.FileField(upload_to='upload_post')
+    content = models.FileField(upload_to= upload_post)
     caption = models.CharField(max_length=255, blank=True, null=True)
     post_created = models.DateTimeField(auto_now_add=True)
     post_updated = models.DateTimeField(auto_now=True)
