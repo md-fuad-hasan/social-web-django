@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
 
 from .forms import NewUserForm, LoginForm
-from .models import UserProfile, SocialUser
+from .models import UserProfile, SocialUser, Follow
 from post.models import Post
 from post.forms import PostForm
 
@@ -91,3 +91,35 @@ def search_user(request):
         results = SocialUser.objects.filter(username__icontains = data)
 
     return render(request, 'home.html', context={'results':results})
+
+@login_required
+def other_profile(request,username):
+    other_user = SocialUser.objects.get(username=username)
+    user_posts = Post.objects.filter(user=other_user).order_by('-post_created')
+    followed = Follow.objects.filter(follower=request.user, following=other_user)
+
+    if other_user == request.user:
+        return HttpResponseRedirect(reverse('account:profile'))
+
+    return render(request, 'other_profile.html', context={'other_user': other_user, 'user_posts':user_posts, 'followed':followed} )
+
+
+@login_required
+def follow_user(request, username):
+    other_user = SocialUser.objects.get(username=username)
+    followed = Follow.objects.filter(follower=request.user, following=other_user)
+    if not followed :
+        follow = Follow(follower=request.user, following=other_user)
+        follow.save()
+        print('hello')
+
+
+    return HttpResponseRedirect(reverse('account:other_profile', kwargs={'username': username}))
+
+@login_required
+def unfollow_user(request, username):
+    other_user = SocialUser.objects.get(username=username)
+    followed = Follow.objects.filter(follower=request.user, following=other_user)
+    if followed:
+        followed.delete()
+    return HttpResponseRedirect(reverse('account:other_profile', kwargs={'username': username}))

@@ -3,12 +3,12 @@
 {% block body %}
     <div class="container-md ">
         {% if results %}
-        <div class="row">
+        <div class="row mt-2">
             <div class=" col-sm-3">
 
             </div>
             <div class="col-12 col-sm-9">
-                <h3 class="my-5">People you may know</h3>
+                <h3 class="mt-5 mb-2">People you may know</h3>
             </div>
         </div>
         
@@ -17,10 +17,19 @@
                 <div class="row mt-sm-4 mt-3">
                     <div class="col-1 col-sm-3"></div>
                     <div class="col-10 col-sm-9">
-                        <img src="/media/{{ result.profile.profile_pic}}" height="60px" width="60px" class="rounded-circle" alt="">
-                        <span class="mx-sm-4 mx-3" style="width: 300px;"> {{result.username}}</span>                      
-                        <span> Follow </span>
+                        <div class="d-flex">
+                            <div >
+                                <img src="/media/{{ result.profile.profile_pic}}" height="40px" width="40px" class="rounded-circle" alt="">
+                            </div>
+                            <div class="d-flex flex-column mx-sm-4 mx-3">
+                                <a href="{% url 'account:other_profile' username=result.username %}" class="text-dark">
+                                    <span style="font-size: 18px; font-weight: 500;"> {{result.username}}</span>
+                                </a>
+                                <span class="text-secondary " style="font-size: 14px; font-weight: 400;"> {{ result.profile.full_name }}</span>                     
+                            </div>
+                        </div>
 
+                    
                     </div>
                 </div>
             {% endfor %}

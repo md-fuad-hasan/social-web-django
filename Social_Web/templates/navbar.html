@@ -78,7 +78,7 @@
         <div class="col-12 col-md-11 col-xl-10">{% block body %} {% endblock%}</div>
 
       </div>
-
+    </div>
       <div class="fixed-bottom d-md-none bg-light">
         <ul class="nav nav-pills d-flex justify-content-around  text-dark">
           
@@ -103,7 +103,7 @@
           <li class="nav-item ">
             <a href="{% url 'account:profile' %}" class="nav-link text-dark d-flex align-items-center" style="font-size: 15px;">
               {% if user.profile.profile_pic %}
-                <img src="/media/{{user.profile.profile_pic}}" height="30" width="30" style="margin-right: 16px;" alt="" srcset="" class="rounded-circle">
+                <img src="/media/{{user.profile.profile_pic}}" height="28" width="28" style="margin-right: 16px;" alt="" srcset="" class="rounded-circle">
               {% else %}
                 <i class="fa-solid fa-user" style="font-size: 23px;"></i>
               {% endif %}
@@ -118,6 +118,21 @@
             </a>
           </li>
         </ul>
+      </div>
+
+      <div class="fixed-top d-md-none bg-light">
+        <ul class=" nav d-flex flex-nowrap mt-2  justify-content-around">
+          <li class="nav-item ">
+            <a href="{% url 'home' %}" class="nav-link text-dark">Social
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <form action="{% url 'account:search_user' %}"  method="GET">
+              <input type="text" name="search" placeholder="Search" id=""><br>
+            </form>
+          </li>
+        </ul>
+
       </div>
 
      
