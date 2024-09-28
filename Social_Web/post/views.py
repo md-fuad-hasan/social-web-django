@@ -2,8 +2,8 @@ from django.shortcuts import render, HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-
 from .forms import PostForm
+from .models import Like, Post
 
 # Create your views here.
 
@@ -20,3 +20,21 @@ def upload(request):
             
             return HttpResponseRedirect(reverse('home'))
     return render(request, 'upload.html', context={'form':form})
+
+
+@login_required
+def like(request, pk):
+    post = Post.objects.get(pk=pk)
+    like = Like.objects.create(liker=request.user, post=post)
+
+    return HttpResponseRedirect(reverse('home'))
+
+@login_required
+def unlike(request, pk):
+    post = Post.objects.get(pk=pk)
+    unlike = Like.objects.filter(liker=request.user, post=post)
+    print(unlike)
+
+    unlike.delete()
+
+    return HttpResponseRedirect(reverse('home'))

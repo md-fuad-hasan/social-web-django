@@ -25,3 +25,10 @@ class Post(models.Model):
         elif (type_tuple[0]).__contains__("video"):
             return "video"
 
+
+class Like(models.Model):
+    liker = models.ForeignKey(SocialUser, on_delete=models.CASCADE, related_name='liker')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='liked_post')
+
+    def __str__(self):
+        return self.liker.username + ' likes '  + self.post.user.username +"'s " + str(self.post.pk)

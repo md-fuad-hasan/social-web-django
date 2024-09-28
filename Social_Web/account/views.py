@@ -3,10 +3,11 @@ from django.urls import reverse
 from django.contrib.auth import login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
+from django.db.models import Q
 
 from .forms import NewUserForm, LoginForm
 from .models import UserProfile, SocialUser, Follow
-from post.models import Post
+from post.models import Post,Like
 from post.forms import PostForm
 
 # Create your views here.
@@ -57,12 +58,11 @@ def logout_view(request):
 
 @login_required
 def home(request):
-    try:
-        user_profile = SocialUser.objects.get(user=request.user)
-    except:
-        user_profile = None
-
-    return render(request, 'home.html', context={'user_profile':user_profile})
+    followed = Follow.objects.filter(follower=request.user)
+    posts = Post.objects.filter(Q(user__in = followed.values_list('following')) | Q(user = request.user)).order_by('-post_created')
+    likes = Like.objects.filter(liker=request.user)
+    liked = likes.values_list('post', flat=True)
+    return render(request, 'home.html', context={'posts':posts, 'likes':liked})
 
 @login_required
 def user_profile(request):
@@ -111,7 +111,6 @@ def follow_user(request, username):
     if not followed :
         follow = Follow(follower=request.user, following=other_user)
         follow.save()
-        print('hello')
 
 
     return HttpResponseRedirect(reverse('account:other_profile', kwargs={'username': username}))
