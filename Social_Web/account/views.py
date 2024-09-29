@@ -139,4 +139,4 @@ def edit_profile(request):
             
             
             return HttpResponseRedirect(reverse('account:profile'))
-    return render(request, 'upload.html', context={'form':form})
+    return render(request, 'edit_profile.html', context={'form':form})
