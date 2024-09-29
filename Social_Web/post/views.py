@@ -38,3 +38,19 @@ def unlike(request, pk):
     unlike.delete()
 
     return HttpResponseRedirect(reverse('home'))
+
+@login_required
+def detail_post(request, pk):
+    post = Post.objects.get(pk=pk)
+    deletable = False
+    if post.user == request.user:
+        deletable = True
+
+    return render(request, 'detail_post.html', context={'post':post, 'canDelete': deletable})
+
+@login_required
+def delete_post(request, pk):
+    post = Post.objects.get(pk=pk)
+    deleted = post.delete()
+    return HttpResponseRedirect(reverse('account:profile'))
+

@@ -68,11 +68,14 @@
             <div class="col-md-8">
                 {% for post in user_posts %}
                     <div class="bg-image d-inline-block hover-overlay"  style="width: 32%; height: 260px;" >
+                       <a href="{% url 'post:detail_post' pk=post.pk %}">
+
                         {% if post.media_type_html == "video" %}
                             <video style="width: 32%; height: 260px;" class="w-100 h-100" alt="This is video" > <source src="/media/{{ post.content }}" > </video>
                         {% elif post.media_type_html == "image" %}
                             <img src="/media/{{post.content}}" class="w-100" style="width: 32%; height: 260px;" alt="">
                         {% endif %}
+                       </a>
                         <div
                             class="mask"
                             style="
