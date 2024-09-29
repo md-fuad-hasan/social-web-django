@@ -1,5 +1,5 @@
 from django import forms
-from .models import SocialUser
+from .models import SocialUser,UserProfile
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 
@@ -47,3 +47,8 @@ class LoginForm(forms.Form):
         widget=(forms.PasswordInput(attrs={'placeholder': 'Enter your Password'}))
     )
     
+
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields =('profile_pic', 'bio', 'full_name')

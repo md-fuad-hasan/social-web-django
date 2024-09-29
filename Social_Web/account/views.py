@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
 from django.db.models import Q
 
-from .forms import NewUserForm, LoginForm
+from .forms import NewUserForm, LoginForm, EditProfileForm
 from .models import UserProfile, SocialUser, Follow
 from post.models import Post,Like
 from post.forms import PostForm
@@ -122,3 +122,21 @@ def unfollow_user(request, username):
     if followed:
         followed.delete()
     return HttpResponseRedirect(reverse('account:other_profile', kwargs={'username': username}))
+
+
+@login_required
+def edit_profile(request):
+    try:
+        user_profile = request.user.profile
+    except UserProfile.DoesNotExist:
+        user_profile = UserProfile(user = request.user)
+
+    form = EditProfileForm(instance=user_profile)
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, request.FILES,instance=user_profile)
+        if form.is_valid():
+            form.save(commit=True)
+            
+            
+            return HttpResponseRedirect(reverse('account:profile'))
+    return render(request, 'upload.html', context={'form':form})
